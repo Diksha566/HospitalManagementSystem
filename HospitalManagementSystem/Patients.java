@@ -41,7 +41,48 @@ public class Patients{
     }
 
     public void viewPatients(){
-        
+        String query = "SELECT * from patients";
+        try{
+            PreparedStatement preparedStatement = Connection.prepareStatement(query);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            //fromating the output like db
+            System.out.println("Patients: ");
+            System.out.println("+--------------+--------------+----------+-----------------+");
+            System.out.println("| Patient Id   | Name         | Age      | Gennder         |");
+            System.out.println("+--------------+--------------+----------+-----------------+");
+            while(resultSet.next()){
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                int age = resultSet.getInt("age");
+                String gender = resultSet.getString("gender");
+                System.out.printf("|%-14s|%-14s|%10-s|%17-s|\n", id, name, age);
+                System.out.println("+--------------+--------------+----------+-----------------+");
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean getPatientById(int id) {
+        String query = "SELECT * FROM patients id = ?";
+        try{
+            PreparedStatement preparedStatement = Connection.prepareStatement(query);
+            preparedStatement.setInt(1,id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch(SQLException e){
+            e.printStackTrace();;
+        }
+
+        return false;
     }
 
     
